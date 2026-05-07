@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drone Swarm Genetic Algorithm</title>
+  <link rel="stylesheet" href="styles/style.css">
+
+
+</head>
+<body>
+  <div id="ui-panel">
+    <h3 style="margin-bottom: 15px; text-align: center;">🚁 Drone Navigation GA</h3>
+    
+    <div id="controls">
+      <div class="button-group">
+        <button id="wall-btn" class="active" onclick="setPlacingMode('wall')">🧱 Wall</button>
+        <button id="start-btn" onclick="setPlacingMode('start')">🚀 Start</button>
+        <button id="target-btn" onclick="setPlacingMode('target')">🎯 Target</button>
+      </div>
+      <div class="button-group">
+        <button onclick="clearWalls()">🗑️ Clear Walls</button>
+        <button onclick="resetGA()">🔄 Reset GA</button>
+        <button onclick="togglePause()">⏯️ Pause/Play</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-label">Generation:</span>
+        <span class="stat-value" id="generation">1</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Best Fitness:</span>
+        <span class="stat-value" id="best-fitness">0.00</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Successful:</span>
+        <span class="stat-value" id="successful">0/50</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Progress:</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background: #4CAF50;"></div>
+        <span>Successful Drone</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #FF5722;"></div>
+        <span>Active Drone</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #9E9E9E;"></div>
+        <span>Failed Drone</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="instructions">
+    <strong>Instructions:</strong><br>
+    • Select a tool and click/drag on canvas<br>
+    • Walls: Click and drag to create obstacles<br>
+    • Start/Target: Click to place positions<br>
+    • Watch drones evolve to find the optimal path!
+  </div>
+   <canvas id="canvas"></canvas>
+   
+  <script src="scripts/drone.js"></script>
+<script src="scripts/genetic.js"></script>
+<script src="scripts/ui.js"></script>
+<script src="scripts/main.js"></script>
+
+
+ 
+</body>
+</html>
