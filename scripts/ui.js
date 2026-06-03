@@ -37,6 +37,14 @@ const UI = {
       // Buttons
       pauseBtn:     document.getElementById('pause-btn'),
 
+      // Sidebar / Instructions
+      sidebar:      document.getElementById('sidebar'),
+      collapseBtn:  document.getElementById('collapse-btn'),
+      expandBtn:    document.getElementById('expand-btn'),
+      instructions: document.getElementById('instructions'),
+      instrClose:   document.getElementById('instructions-close'),
+      helpBtn:      document.getElementById('help-btn'),
+
       // Chart
       chartCanvas:  document.getElementById('chart-canvas'),
 
@@ -48,6 +56,7 @@ const UI = {
     this.bindToolButtons();
     this.bindActionButtons();
     this.bindSpeedButtons();
+    this.bindPanelControls();
   },
 
   // --- Slider bindings ---
@@ -101,6 +110,10 @@ const UI = {
       SIM.isPaused = !SIM.isPaused;
       this.els.pauseBtn.textContent = SIM.isPaused ? '▶️ Play' : '⏸️ Pause';
     });
+
+    this.els.helpBtn.addEventListener('click', () => {
+      this.els.instructions.classList.remove('hidden');
+    });
   },
 
   // --- Speed Buttons ---
@@ -111,6 +124,29 @@ const UI = {
         btn.classList.add('active');
         SIM.speed = parseInt(btn.dataset.speed, 10);
       });
+    });
+  },
+
+  // --- Panel Controls (collapse/expand/close) ---
+  bindPanelControls() {
+    // Collapse sidebar
+    this.els.collapseBtn.addEventListener('click', () => {
+      this.els.sidebar.classList.add('collapsed');
+      this.els.expandBtn.classList.remove('hidden');
+      // Resize canvas after transition
+      setTimeout(() => SIM.resizeCanvas(), 450);
+    });
+
+    // Expand sidebar
+    this.els.expandBtn.addEventListener('click', () => {
+      this.els.sidebar.classList.remove('collapsed');
+      this.els.expandBtn.classList.add('hidden');
+      setTimeout(() => SIM.resizeCanvas(), 450);
+    });
+
+    // Close instructions
+    this.els.instrClose.addEventListener('click', () => {
+      this.els.instructions.classList.add('hidden');
     });
   },
 

@@ -88,6 +88,17 @@ body {
   z-index: 10;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: width var(--transition-slow), min-width var(--transition-slow),
+              padding var(--transition-slow), opacity var(--transition-normal);
+}
+
+.sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border-right: none;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -105,6 +116,12 @@ body {
 .sidebar-header {
   padding: 20px 20px 16px;
   border-bottom: 1px solid var(--border-glass);
+}
+
+.sidebar-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .sidebar-header h1 {
@@ -536,6 +553,31 @@ input[type="range"]::-moz-range-thumb {
   transition: opacity var(--transition-normal);
 }
 
+.instructions-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.instructions-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+.instructions-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .instructions-overlay strong {
   color: var(--text-primary);
   font-weight: 600;
@@ -562,6 +604,56 @@ input[type="range"]::-moz-range-thumb {
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* --- Collapse / Expand Buttons --- */
+.collapse-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.collapse-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-glass-hover);
+}
+
+.expand-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 15;
+  background: var(--bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+  line-height: 1;
+}
+
+.expand-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-panel-hover);
+  border-color: var(--border-glass-hover);
+  transform: translateX(2px);
+}
+
+.expand-btn.hidden {
+  display: none;
 }
 
 /* --- Animations --- */

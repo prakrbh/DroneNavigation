@@ -16,7 +16,10 @@
 
       <!-- Header -->
       <div class="sidebar-header">
-        <h1><span class="icon">🚁</span> Drone Swarm GA</h1>
+        <div class="sidebar-header-row">
+          <h1><span class="icon">🚁</span> Drone Swarm GA</h1>
+          <button class="collapse-btn" id="collapse-btn" title="Minimize panel">◀</button>
+        </div>
         <p class="subtitle">Evolutionary Path Optimization</p>
       </div>
 
@@ -32,6 +35,7 @@
           <button class="action-btn danger" id="clear-walls-btn">🗑️ Clear Walls</button>
           <button class="action-btn" id="reset-btn">🔄 Reset GA</button>
           <button class="action-btn success" id="pause-btn">⏸️ Pause</button>
+          <button class="action-btn" id="help-btn">❓ Help</button>
         </div>
       </div>
 
@@ -153,7 +157,11 @@
     <main class="canvas-area">
       <canvas id="canvas"></canvas>
 
+      <!-- Expand button (visible when sidebar is collapsed) -->
+      <button class="expand-btn hidden" id="expand-btn" title="Show panel">▶</button>
+
       <div class="instructions-overlay" id="instructions">
+        <button class="instructions-close" id="instructions-close" title="Close">✕</button>
         <strong>How to use:</strong><br>
         • Select a tool from the sidebar, then click/drag on the canvas<br>
         • <span class="key">Wall</span> — Click &amp; drag to draw obstacles<br>
