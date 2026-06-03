@@ -3,80 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drone Swarm Genetic Algorithm</title>
+  <meta name="description" content="Interactive drone swarm navigation simulator powered by Genetic Algorithms. Watch drones evolve to navigate obstacles in real-time.">
+  <title>Drone Swarm — Genetic Algorithm Simulator</title>
   <link rel="stylesheet" href="styles/style.css">
-
-
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>">
 </head>
 <body>
-  <div id="ui-panel">
-    <h3 style="margin-bottom: 15px; text-align: center;">🚁 Drone Navigation GA</h3>
-    
-    <div id="controls">
-      <div class="button-group">
-        <button id="wall-btn" class="active" onclick="setPlacingMode('wall')">🧱 Wall</button>
-        <button id="start-btn" onclick="setPlacingMode('start')">🚀 Start</button>
-        <button id="target-btn" onclick="setPlacingMode('target')">🎯 Target</button>
-      </div>
-      <div class="button-group">
-        <button onclick="clearWalls()">🗑️ Clear Walls</button>
-        <button onclick="resetGA()">🔄 Reset GA</button>
-        <button onclick="togglePause()">⏯️ Pause/Play</button>
-      </div>
-    </div>
+  <div class="app-container">
 
-    <div class="stats">
-      <div class="stat-item">
-        <span class="stat-label">Generation:</span>
-        <span class="stat-value" id="generation">1</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Best Fitness:</span>
-        <span class="stat-value" id="best-fitness">0.00</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Successful:</span>
-        <span class="stat-value" id="successful">0/50</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Progress:</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-    </div>
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar" id="sidebar">
 
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-color" style="background: #4CAF50;"></div>
-        <span>Successful Drone</span>
+      <!-- Header -->
+      <div class="sidebar-header">
+        <h1><span class="icon">🚁</span> Drone Swarm GA</h1>
+        <p class="subtitle">Evolutionary Path Optimization</p>
       </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: #FF5722;"></div>
-        <span>Active Drone</span>
+
+      <!-- Tools -->
+      <div class="panel-section">
+        <div class="section-title">Placement Tools</div>
+        <div class="tool-group">
+          <button class="tool-btn active" id="wall-btn" data-tool="wall">🧱 Wall</button>
+          <button class="tool-btn" id="start-btn" data-tool="start">🚀 Start</button>
+          <button class="tool-btn" id="target-btn" data-tool="target">🎯 Target</button>
+        </div>
+        <div class="action-group">
+          <button class="action-btn danger" id="clear-walls-btn">🗑️ Clear Walls</button>
+          <button class="action-btn" id="reset-btn">🔄 Reset GA</button>
+          <button class="action-btn success" id="pause-btn">⏸️ Pause</button>
+        </div>
       </div>
-      <div class="legend-item">
-        <div class="legend-color" style="background: #9E9E9E;"></div>
-        <span>Failed Drone</span>
+
+      <!-- Speed Control -->
+      <div class="panel-section">
+        <div class="section-title">Simulation Speed</div>
+        <div class="speed-control">
+          <button class="speed-btn active" data-speed="1">1×</button>
+          <button class="speed-btn" data-speed="2">2×</button>
+          <button class="speed-btn" data-speed="5">5×</button>
+          <button class="speed-btn" data-speed="10">10×</button>
+        </div>
       </div>
-    </div>
+
+      <!-- GA Parameters -->
+      <div class="panel-section">
+        <div class="section-title">GA Parameters</div>
+        <div class="slider-group">
+          <div class="slider-item">
+            <div class="slider-label">
+              <span>Population</span>
+              <span class="slider-value" id="pop-val">60</span>
+            </div>
+            <input type="range" id="pop-slider" min="10" max="200" value="60" step="10">
+          </div>
+          <div class="slider-item">
+            <div class="slider-label">
+              <span>Mutation Rate</span>
+              <span class="slider-value" id="mut-val">2%</span>
+            </div>
+            <input type="range" id="mut-slider" min="0.5" max="15" value="2" step="0.5">
+          </div>
+          <div class="slider-item">
+            <div class="slider-label">
+              <span>Lifespan</span>
+              <span class="slider-value" id="life-val">400</span>
+            </div>
+            <input type="range" id="life-slider" min="100" max="800" value="400" step="50">
+          </div>
+          <div class="slider-item">
+            <div class="slider-label">
+              <span>Max Force</span>
+              <span class="slider-value" id="force-val">0.30</span>
+            </div>
+            <input type="range" id="force-slider" min="0.05" max="1.0" value="0.30" step="0.05">
+          </div>
+          <div class="slider-item">
+            <div class="slider-label">
+              <span>Elite Count</span>
+              <span class="slider-value" id="elite-val">3</span>
+            </div>
+            <input type="range" id="elite-slider" min="1" max="10" value="3" step="1">
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="panel-section">
+        <div class="section-title">Live Statistics</div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Generation</div>
+            <div class="stat-value highlight" id="stat-generation">1</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Best Fitness</div>
+            <div class="stat-value warning" id="stat-best-fitness">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Fitness</div>
+            <div class="stat-value" id="stat-avg-fitness">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Reached</div>
+            <div class="stat-value success" id="stat-reached">0/60</div>
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Generation Progress</span>
+            <span class="progress-pct" id="progress-pct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fitness Chart -->
+      <div class="panel-section">
+        <div class="section-title">Fitness Over Generations</div>
+        <div class="chart-container">
+          <canvas id="chart-canvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="panel-section">
+        <div class="section-title">Legend</div>
+        <div class="legend-list">
+          <div class="legend-row"><div class="legend-dot active"></div><span>Active Drone</span></div>
+          <div class="legend-row"><div class="legend-dot success"></div><span>Reached Target</span></div>
+          <div class="legend-row"><div class="legend-dot crashed"></div><span>Crashed / Failed</span></div>
+          <div class="legend-row"><div class="legend-dot best"></div><span>Best of Generation</span></div>
+        </div>
+      </div>
+
+      <!-- Generation Log -->
+      <div class="panel-section">
+        <div class="section-title">Generation Log</div>
+        <div class="gen-log" id="gen-log"></div>
+      </div>
+
+    </aside>
+
+    <!-- ===== Canvas Area ===== -->
+    <main class="canvas-area">
+      <canvas id="canvas"></canvas>
+
+      <div class="instructions-overlay" id="instructions">
+        <strong>How to use:</strong><br>
+        • Select a tool from the sidebar, then click/drag on the canvas<br>
+        • <span class="key">Wall</span> — Click &amp; drag to draw obstacles<br>
+        • <span class="key">Start</span> / <span class="key">Target</span> — Click to reposition<br>
+        • Tweak GA parameters live with the sliders<br>
+        • Watch the drones evolve optimal paths!
+      </div>
+    </main>
+
   </div>
 
-  <div id="instructions">
-    <strong>Instructions:</strong><br>
-    • Select a tool and click/drag on canvas<br>
-    • Walls: Click and drag to create obstacles<br>
-    • Start/Target: Click to place positions<br>
-    • Watch drones evolve to find the optimal path!
-  </div>
-   <canvas id="canvas"></canvas>
-   
   <script src="scripts/drone.js"></script>
-<script src="scripts/genetic.js"></script>
-<script src="scripts/ui.js"></script>
-<script src="scripts/main.js"></script>
-
-
- 
+  <script src="scripts/genetic.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
 </body>
 </html>
